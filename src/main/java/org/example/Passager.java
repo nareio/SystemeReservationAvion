@@ -6,12 +6,12 @@ import java.util.Random;
 public class Passager extends Personne {
 
     private final int passport;
-    private ArrayList<Reservation> reservation;
+    private ArrayList<Reservation> reservations;
 
     public Passager(String nom, String adresse, Personne contact) {
         super(nom, adresse, contact);
         this.passport = new Random().nextInt(1_000_000);
-        this.reservation = new ArrayList<>();
+        this.reservations = new ArrayList<>();
     }
 
     public int getPassport() {
@@ -19,20 +19,20 @@ public class Passager extends Personne {
     }
 
     public ArrayList<Reservation> getReservation() {
-        return reservation;
+        return reservations;
     }
 
     public void annulerReservation(int numeroReservation) {
-        for (int i = 0; i < this.reservation.size(); i++) {
-            if (this.reservation.get(i).getNumeroReservation() == numeroReservation) {
-                this.reservation.get(i).annulerReservation();
-                this.reservation.remove(i);
+        for (int i = 0; i < this.reservations.size(); i++) {
+            if (this.reservations.get(i).getNumeroReservation() == numeroReservation) {
+                this.reservations.get(i).annulerReservation();
+                this.reservations.remove(i);
             }
         }
     }
 
     public String obtenirReservation(int numeroReservation) {
-        for (Reservation reservation : this.reservation) {
+        for (Reservation reservation : this.reservations) {
             if (reservation.getNumeroReservation() == numeroReservation) {
                 return "reservation trouvé pour le passager : "+reservation.toString();
             }
@@ -43,8 +43,14 @@ public class Passager extends Personne {
     public void reserverVol(Vol vol, String dateReservation) {
         Reservation reservation = new Reservation(dateReservation, this);
         reservation.addVol(vol);
-        reservations.add(reservation);
+        this.reservations.add(reservation);
     }
 
-
+    @Override
+    public String toString() {
+        return "Passager{" +
+                "passport=" + passport +
+                ", reservations=" + reservations +
+                '}';
+    }
 }
