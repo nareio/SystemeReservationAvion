@@ -4,7 +4,7 @@ package org.example;
 import java.util.Random;
 
 public class Personne {
-    private int identifiant;
+    private final int identifiant;
     private String nom;
     private String adresse;
     private Personne contact;
@@ -17,5 +17,8 @@ public class Personne {
         this.contact = contact;
     }
 
+    public String obtenirInfos(){
+        return "Identifiant : " + this.identifiant + ", adresse : " + this.adresse + ", nom : " + this.nom + ", contact : " + this.contact;
+    }
 
 }
