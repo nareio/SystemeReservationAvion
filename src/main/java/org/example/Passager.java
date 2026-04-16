@@ -8,7 +8,7 @@ public class Passager extends Personne {
     private final int passport;
     private ArrayList<Reservation> reservations;
 
-    public Passager(String nom, String adresse, Personne contact) {
+    public Passager(String nom, String adresse, String contact) {
         super(nom, adresse, contact);
         this.passport = new Random().nextInt(1_000_000);
         this.reservations = new ArrayList<>();
@@ -38,6 +38,10 @@ public class Passager extends Personne {
             }
         }
         return "cette reservation n'existe pas pour le passager";
+    }
+
+    public ArrayList<Reservation> getReservations() {
+        return reservations;
     }
 
     public void reserverVol(Vol vol, String dateReservation) {

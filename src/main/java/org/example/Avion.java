@@ -26,14 +26,13 @@ public class Avion {
         System.out.println("Avion " + immatriculation + " affecté au vol " + vol.getNumeroVol());
     }
 
-    //TO DO
     public boolean verifierDisponibilite(Vol volVoulu) {
         boolean chevauchement;
-        String debutDemande = volVoulu.getDeparComparable();
+        String debutDemande = volVoulu.getDepartComparable();
         String finDemande   = volVoulu.getArriveeComparable();
 
         for (Vol vol : vols) {
-            String debutExistant = vol.getDeparComparable();
+            String debutExistant = vol.getDepartComparable();
             String finExistante  = vol.getArriveeComparable();
 
             chevauchement = debutExistant.compareTo(finDemande) < 0 && finExistante.compareTo(debutDemande) > 0;
@@ -45,5 +44,27 @@ public class Avion {
         return true;
     }
 
+    public ArrayList<Vol> getVols() {
+        return vols;
+    }
 
+    public int getCapacite() {
+        return capacite;
+    }
+
+    public String getModele() {
+        return modele;
+    }
+
+    public int getImmatriculation() {
+        return immatriculation;
+    }
+
+    public void setModele(String modele) {
+        this.modele = modele;
+    }
+
+    public void setCapacite(int capacite) {
+        this.capacite = capacite;
+    }
 }

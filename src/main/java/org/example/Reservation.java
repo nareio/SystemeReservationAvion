@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Reservation {
@@ -59,6 +60,14 @@ public class Reservation {
         }
     }
 
+    public void removeVol(Vol vol) {
+        for (int i = 0; i < this.vols.size(); i++) {
+            if (this.vols.get(i).getNumeroVol() == vol.getNumeroVol()) {
+                this.vols.remove(i);
+            }
+        }
+    }
+
     public Passager getPassager() {
         return passager;
     }
@@ -67,14 +76,19 @@ public class Reservation {
         this.passager = passager;
     }
 
+
     @Override
     public String toString() {
+        List<Integer> numVols = new ArrayList<Integer>();
+        for (Vol v : vols) {
+            numVols.add(v.getNumeroVol());
+        }
+
         return "Reservation{" +
-                "numeroReservation=" + numeroReservation +
-                ", dateReservation='" + dateReservation + '\'' +
-                ", statut='" + statut + '\'' +
-                ", vols=" + vols +
-                ", passager=" + passager +
-                '}';
+                "numero=" + numeroReservation +
+                ", date=" + dateReservation +
+                ", statut=" + statut +
+                ", vols=" + numVols +
+                "}";
     }
 }

@@ -7,8 +7,8 @@ public class Pilote extends Employe{
     private final int licence;
     private int heureDeVol;
 
-    public Pilote(String nom, String adresse, Personne contact, int numeroEmploye, String dateEmbauche, int heureDeVol) {
-        super(nom, adresse, contact, numeroEmploye, dateEmbauche);
+    public Pilote(String nom, String adresse, String contact, String dateEmbauche, int heureDeVol) {
+        super(nom, adresse, contact, dateEmbauche);
         this.licence = new Random().nextInt(1_000_000);
         this.heureDeVol = heureDeVol;
     }
@@ -16,6 +16,11 @@ public class Pilote extends Employe{
     @Override
     public String obtenirRole() {
         return "pilote";
+    }
+
+    @Override
+    public void affecterVol(Vol vol) {
+        vol.affecterPilote(this);
     }
 
     @Override
