@@ -1,6 +1,9 @@
 package org.example;
 
 import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Vol {
 
@@ -28,6 +31,18 @@ public class Vol {
 
     public Vol(String dateHeureDepart, String dateHeureArrivee, String etat) {
         this.numeroVol = new Random().nextInt(1_000_000);
+        DateHeureDepart = dateHeureDepart;
+        DateHeureArrivee = dateHeureArrivee;
+        Etat = etat;
+        this.avion = null;
+        reservations = new ArrayList<>();
+        equipageCabine = new ArrayList<>();
+        this.aeroports = new ArrayDeque<>();
+        this.pilote = null;
+    }
+
+    public Vol(int numeroVol, String dateHeureDepart, String dateHeureArrivee, String etat) {
+        this.numeroVol = numeroVol;
         DateHeureDepart = dateHeureDepart;
         DateHeureArrivee = dateHeureArrivee;
         Etat = etat;
@@ -207,6 +222,85 @@ public class Vol {
             derniere = a;
         }
         return derniere;
+    }
+
+    public static ArrayList<Vol> importFlights(String cheminFichier, ArrayList<Aeroport> aeroports) {
+        ArrayList<Vol> vols = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(cheminFichier))) {
+
+            String ligne;
+            boolean premiereLigne = true;
+
+            while ((ligne = br.readLine()) != null) {
+
+                if (premiereLigne) {
+                    premiereLigne = false;
+                    continue;
+                }
+
+                if (ligne.trim().isEmpty()) continue;
+
+                String[] colonnes = ligne.split(",");
+
+                if (colonnes.length < 5) {
+                    System.out.println("Ligne ignorée (format invalide) : " + ligne);
+                    continue;
+                }
+
+                // Pas de numeroVol — généré automatiquement dans le constructeur
+                String dateHeureDepart  = colonnes[0].trim();
+                String dateHeureArrivee = colonnes[1].trim();
+                String etat             = colonnes[2].trim();
+                String nomDepart        = colonnes[3].trim();
+                String nomArrivee       = colonnes[4].trim();
+
+                // Constructeur sans numéro de vol
+                Vol vol = new Vol(dateHeureDepart, dateHeureArrivee, etat);
+
+                Aeroport aeroportDepart  = trouverAeroport(aeroports, nomDepart);
+                Aeroport aeroportArrivee = trouverAeroport(aeroports, nomArrivee);
+
+                if (aeroportDepart != null) {
+                    vol.ajouterAeroport(aeroportDepart);
+                } else {
+                    Aeroport nouveau = new Aeroport(nomDepart, nomDepart, "");
+                    vol.ajouterAeroport(nouveau);
+                    aeroports.add(nouveau);
+                    System.out.println("Aéroport créé automatiquement : " + nomDepart);
+                }
+
+                if (aeroportArrivee != null) {
+                    vol.ajouterAeroport(aeroportArrivee);
+                } else {
+                    Aeroport nouveau = new Aeroport(nomArrivee, nomArrivee, "");
+                    vol.ajouterAeroport(nouveau);
+                    aeroports.add(nouveau);
+                    System.out.println("Aéroport créé automatiquement : " + nomArrivee);
+                }
+
+                vols.add(vol);
+                System.out.println("Vol importé : " + vol.getNumeroVol()
+                        + " | " + nomDepart + " -> " + nomArrivee
+                        + " | " + dateHeureDepart);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erreur lecture fichier : " + e.getMessage());
+        }
+
+        System.out.println("\n" + vols.size() + " vol(s) importé(s) depuis " + cheminFichier);
+        return vols;
+    }
+
+    //recherche un aéroport par ville dans la liste
+    private static Aeroport trouverAeroport(List<Aeroport> aeroports, String ville) {
+        for (Aeroport a : aeroports) {
+            if (a.getVille().equalsIgnoreCase(ville)) {
+                return a;
+            }
+        }
+        return null;
     }
 
 }

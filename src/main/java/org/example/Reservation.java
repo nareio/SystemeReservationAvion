@@ -1,5 +1,8 @@
 package org.example;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -90,5 +93,40 @@ public class Reservation {
                 ", statut=" + statut +
                 ", vols=" + numVols +
                 "}";
+    }
+
+    public void saveReservationFile(String cheminFichier) {
+
+        // true = mode append, on écrit à la fin sans écraser
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(cheminFichier, true))) {
+
+            // Vérifie si le fichier est vide
+            java.io.File fichier = new java.io.File(cheminFichier);
+            if (fichier.length() == 0) {
+                bw.write("numeroReservation,dateReservation,statut,passager,vols");
+                bw.newLine();
+            }
+
+            // Construit la liste des numéros de vol
+            StringBuilder numVols = new StringBuilder();
+            for (Vol v : vols) {
+                if (!numVols.isEmpty()) numVols.append("|");
+                numVols.append(v.getNumeroVol());
+            }
+
+            bw.write(
+                    numeroReservation + "," +
+                            dateReservation   + "," +
+                            statut            + "," +
+                            passager.getNom() + "," +
+                            numVols.toString()
+            );
+            bw.newLine();
+
+            System.out.println("Réservation " + numeroReservation + " sauvegardée dans " + cheminFichier);
+
+        } catch (IOException e) {
+            System.out.println("Erreur écriture fichier : " + e.getMessage());
+        }
     }
 }

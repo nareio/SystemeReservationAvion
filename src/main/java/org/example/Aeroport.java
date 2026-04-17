@@ -27,6 +27,14 @@ public class Aeroport {
         volsArrivee.add(vol);
     }
 
+    public ArrayList<Vol> getVolsDepart() {
+        return volsDepart;
+    }
+
+    public ArrayList<Vol> getVolsArrivee() {
+        return volsArrivee;
+    }
+
     public void removeVolDepart(Vol vol) {
         volsDepart.remove(vol);
     }

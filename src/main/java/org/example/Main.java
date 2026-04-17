@@ -105,7 +105,7 @@ public class Main {
         afficherReservations(passager2);
         afficherReservations(passager3);
 
-        // 10. Planification
+        //Planification
         System.out.println("\n=== Planification ===");
         Planning planning1 = new Planning("10/06/2025");
         planning1.planifierVol(v1);
@@ -120,9 +120,7 @@ public class Main {
         planning1.afficherPlanning();
         planning2.afficherPlanning();
 
-        // ─────────────────────────────────────────
-        // 11. Rapport
-        // ─────────────────────────────────────────
+        //Rapport
         ArrayList<Planning> plannings = new ArrayList<>();
         plannings.add(planning1);
         plannings.add(planning2);
@@ -130,10 +128,46 @@ public class Main {
         Rapport rapport = new Rapport(plannings);
         rapport.afficherRapport();
 
+
+        // TEST importFlights() — lecture Vols.csv
+        System.out.println("--- Test import depuis Vols.csv ---");
+        ArrayList<Aeroport> listeAeroports = new ArrayList<>();
+        listeAeroports.add(cdg);
+        listeAeroports.add(dxb);
+        listeAeroports.add(jfk);
+        listeAeroports.add(hnd);
+        listeAeroports.add(lyx);
+
+        ArrayList<Vol> volsImportes = Vol.importFlights(
+                "src/main/resources/Vols.csv",
+                listeAeroports
+        );
+
+        System.out.println("Vols importés :");
+        for (Vol v : volsImportes) {
+            v.afficherItineraire();
+        }
+
+        // TEST saveReservationFile() — écriture passagers.csv
+        System.out.println("--- Test sauvegarde dans passagers.csv ---");
+        String fichierPassagers = "src/main/resources/passagers.csv";
+
+        for (Reservation r : passager1.getReservations()) {
+            r.saveReservationFile(fichierPassagers);
+        }
+        for (Reservation r : passager2.getReservations()) {
+            r.saveReservationFile(fichierPassagers);
+        }
+        for (Reservation r : passager3.getReservations()) {
+            r.saveReservationFile(fichierPassagers);
+        }
+
+        System.out.println("Sauvegarde terminée -> " + fichierPassagers);
+
     }
 
     private static void afficherReservations(Passager passager) {
-        System.out.println("\nRéservations de " + passager.getNom() + " :");
+        System.out.println("Réservations de " + passager.getNom() + " :");
         for (Reservation r : passager.getReservations()) {
             System.out.println("  " + r.toString());
         }
